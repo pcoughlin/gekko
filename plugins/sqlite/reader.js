@@ -6,7 +6,7 @@ var log = require(util.dirs().core + 'log');
 var sqlite = require('./handle');
 var sqliteUtil = require('./util');
 
-var Reader = function() {
+var Reader = function () {
   _.bindAll(this);
   this.db = sqlite.initDB(true);
 }
@@ -14,7 +14,11 @@ var Reader = function() {
 
 // returns the most recent window complete candle
 // windows within `from` and `to`
-Reader.prototype.mostRecentWindow = function(from, to, next) {
+Reader.prototype.mostRecentWindow = function (from, to, next) {
+  if (!this.db) {
+    this.db = sqlite.initDB(true);
+  }
+  
   to = to.unix();
   from = from.unix();
 
@@ -24,11 +28,11 @@ Reader.prototype.mostRecentWindow = function(from, to, next) {
     SELECT start from ${sqliteUtil.table('candles')}
     WHERE start <= ${to} AND start >= ${from}
     ORDER BY start DESC
-  `, function(err, rows) {
-    if(err) {
+  `, function (err, rows) {
+    if (err) {
 
       // bail out if the table does not exist
-      if(err.message.split(':')[1] === ' no such table')
+      if (err.message.split(':')[1] === ' no such table')
         return next(false);
 
       log.error(err);
@@ -36,11 +40,11 @@ Reader.prototype.mostRecentWindow = function(from, to, next) {
     }
 
     // no candles are available
-    if(rows.length === 0) {
+    if (rows.length === 0) {
       return next(false);
     }
 
-    if(rows.length === maxAmount) {
+    if (rows.length === maxAmount) {
 
       // full history is available!
 
@@ -53,13 +57,13 @@ Reader.prototype.mostRecentWindow = function(from, to, next) {
     // we have at least one gap, figure out where
     var mostRecent = _.first(rows).start;
 
-    var gapIndex = _.findIndex(rows, function(r, i) {
+    var gapIndex = _.findIndex(rows, function (r, i) {
       return r.start !== mostRecent - i * 60;
     });
 
     // if there was no gap in the records, but
     // there were not enough records.
-    if(gapIndex === -1) {
+    if (gapIndex === -1) {
       var leastRecent = _.last(rows).start;
       return next({
         from: leastRecent,
@@ -70,19 +74,21 @@ Reader.prototype.mostRecentWindow = function(from, to, next) {
     // else return mostRecent and the
     // the minute before the gap
     return next({
-      from: rows[ gapIndex - 1 ].start,
+      from: rows[gapIndex - 1].start,
       to: mostRecent
     });
 
   })
 }
 
-Reader.prototype.tableExists = function(name, next) {
-
+Reader.prototype.tableExists = function (name, next) {
+  if (!this.db) {
+    this.db = sqlite.initDB(true);
+  }
   this.db.all(`
     SELECT name FROM sqlite_master WHERE type='table' AND name='${sqliteUtil.table(name)}';
-  `, function(err, rows) {
-    if(err) {
+  `, function (err, rows) {
+    if (err) {
       console.error(err);
       return util.die('DB error at `get`');
     }
@@ -91,16 +97,21 @@ Reader.prototype.tableExists = function(name, next) {
   });
 }
 
-Reader.prototype.get = function(from, to, what, next) {
-  if(what === 'full')
+Reader.prototype.get = function (from, to, what, next) {
+
+  if (!this.db) {
+    this.db = sqlite.initDB(true);
+  }
+
+  if (what === 'full')
     what = '*';
 
   this.db.all(`
     SELECT ${what} from ${sqliteUtil.table('candles')}
     WHERE start <= ${to} AND start >= ${from}
     ORDER BY start ASC
-  `, function(err, rows) {
-    if(err) {
+  `, function (err, rows) {
+    if (err) {
       console.error(err);
       return util.die('DB error at `get`');
     }
@@ -109,12 +120,15 @@ Reader.prototype.get = function(from, to, what, next) {
   });
 }
 
-Reader.prototype.count = function(from, to, next) {
+Reader.prototype.count = function (from, to, next) {
+  if (!this.db) {
+    this.db = sqlite.initDB(true);
+  }
   this.db.all(`
     SELECT COUNT(*) as count from ${sqliteUtil.table('candles')}
     WHERE start <= ${to} AND start >= ${from}
-  `, function(err, res) {
-    if(err) {
+  `, function (err, res) {
+    if (err) {
       console.error(err);
       return util.die('DB error at `get`');
     }
@@ -123,11 +137,14 @@ Reader.prototype.count = function(from, to, next) {
   });
 }
 
-Reader.prototype.countTotal = function(next) {
+Reader.prototype.countTotal = function (next) {
+  if (!this.db) {
+    this.db = sqlite.initDB(true);
+  }
   this.db.all(`
     SELECT COUNT(*) as count from ${sqliteUtil.table('candles')}
-  `, function(err, res) {
-    if(err) {
+  `, function (err, res) {
+    if (err) {
       console.error(err);
       return util.die('DB error at `get`');
     }
@@ -136,8 +153,10 @@ Reader.prototype.countTotal = function(next) {
   });
 }
 
-Reader.prototype.getBoundry = function(next) {
-
+Reader.prototype.getBoundry = function (next) {
+  if (!this.db) {
+    this.db = sqlite.initDB(true);
+  }
   this.db.all(`
     SELECT
     (
@@ -151,8 +170,8 @@ Reader.prototype.getBoundry = function(next) {
       ORDER BY start DESC
       LIMIT 1
     ) as 'last'
-  `, function(err, rows) {
-    if(err) {
+  `, function (err, rows) {
+    if (err) {
       console.error(err);
       return util.die('DB error at `get`');
     }
@@ -161,7 +180,7 @@ Reader.prototype.getBoundry = function(next) {
   });
 }
 
-Reader.prototype.close = function() {
+Reader.prototype.close = function () {
   this.db.close();
   this.db = null;
 }
