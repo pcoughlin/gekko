@@ -7,15 +7,9 @@ const gekkoRoot = path.resolve(__dirname, '..', '..');
 module.exports = function* () {
 
   const strategyDir = yield fs.readdir(path.join(gekkoRoot, 'strategies'));
-  console.log("******************", strategyDir);
 
   const strats = strategyDir
     .map((f) => { return { name: f.slice(0, -3) } });
-
-  // .filter(f => _.last(f, 3).length > 0 && [_.last(f, 3)].join('') === '.js')
-  // .map(f => {
-  //   return { name: f.slice(0, -3) }
-  // });
 
   // for every strat, check if there is a config file and add it
   const stratConfigPath = path.join(gekkoRoot, 'config/strategies');
