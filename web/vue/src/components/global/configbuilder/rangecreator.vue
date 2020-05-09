@@ -11,16 +11,16 @@ div
 
 <script>
 
-import _ from 'lodash'
-import { post } from '../../../tools/ajax'
+import _ from 'lodash';
+import { post } from '../../../tools/ajax';
 // global moment
 
 export default {
   data: function() {
     return {
       from: '',
-      to: ''
-    }
+      to: '',
+    };
   },
   created: function() {
     let now = moment().startOf('minute');
@@ -31,30 +31,30 @@ export default {
     this.emitRange();
   },
   methods: {
-    fmtTs: (mom) => moment.unix(mom).utc(),
-    fmt: (mom) => mom.utc().format('YYYY-MM-DD HH:mm'),
+    fmtTs: mom => moment.unix(mom).utc(),
+    fmt: mom => mom.utc().format('YYYY-MM-DD HH:mm'),
     emitRange: function() {
       this.$emit('range', {
         from: this.fmtTs(this.from),
-        to: this.fmtTs(this.to)
+        to: this.fmtTs(this.to),
       });
     },
     emitManualEntry: function() {
-      if(this.from.length < '4' || this.from.length < '4')
-        return this.$emit('range', {})
+      if (this.from.length < '4' || this.from.length < '4')
+        return this.$emit('range', {});
 
       let from = moment.utc(this.from);
       let to = moment.utc(this.to);
 
-      if(from.isValid() && to.isValid()) {
+      if (from.isValid() && to.isValid()) {
         this.$emit('range', {
           from: this.fmt(from),
-          to: this.fmt(to)
-        })
+          to: this.fmt(to),
+        });
       } else {
-        this.$emit('range', {})
+        this.$emit('range', {});
       }
-    }
+    },
   },
   watch: {
     from: function() {
@@ -68,19 +68,17 @@ export default {
     },
     tab: function() {
       this.scanned = false;
-      this.$emit('range', {})
+      this.$emit('range', {});
     },
     selectedRangeIndex: function() {
       let selectedRange = this.ranges[this.selectedRangeIndex];
-      if(selectedRange)
-        this.emitRange(selectedRange);
-    }
-  }
-}
+      if (selectedRange) this.emitRange(selectedRange);
+    },
+  },
+};
 </script>
 
 <style>
-
 .scan-btn {
   margin-top: 80px;
   margin-bottom: 30px;
@@ -89,5 +87,4 @@ export default {
 .radio label {
   margin-top: 0;
 }
-
 </style>

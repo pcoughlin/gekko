@@ -50,16 +50,16 @@ div
 
 <script>
 
-import _ from 'lodash'
-import Vue from 'vue'
+import _ from 'lodash';
+import Vue from 'vue';
 
-import { post } from '../../../tools/ajax'
-import spinner from '../../global/blockSpinner.vue'
-import dataset from '../../global/mixins/dataset'
+import { post } from '../../../tools/ajax';
+import spinner from '../../global/blockSpinner.vue';
+import dataset from '../../global/mixins/dataset';
 
 export default {
   components: {
-    spinner
+    spinner,
   },
   data: () => {
     return {
@@ -67,17 +67,17 @@ export default {
       customTo: false,
       customFrom: false,
       rangeVisible: false,
-      set: false
+      set: false,
     };
   },
-  mixins: [ dataset ],
+  mixins: [dataset],
   methods: {
-    humanizeDuration: (n) => {
-      return window.humanizeDuration(n, {largest: 4});
+    humanizeDuration: n => {
+      return window.humanizeDuration(n, { largest: 4 });
     },
     fmt: mom => mom.utc().format('YYYY-MM-DD HH:mm'),
     openRange: function() {
-      if(this.setIndex === -1)
+      if (this.setIndex === -1)
         return alert('Select a dataset to adjust range');
 
       this.updateCustomRange();
@@ -89,13 +89,11 @@ export default {
       this.customFrom = this.fmt(this.set.from);
     },
     emitSet: function(val) {
-      if(!val)
-        return;
+      if (!val) return;
 
       let set;
 
-      if(!this.customTo)
-        set = val;
+      if (!this.customTo) set = val;
       else {
         set = Vue.util.extend({}, val);
         set.to = moment.utc(this.customTo, 'YYYY-MM-DD HH:mm').format();
@@ -103,10 +101,9 @@ export default {
       }
 
       this.$emit('dataset', set);
-    }
+    },
   },
   watch: {
-
     setIndex: function() {
       this.set = this.datasets[this.setIndex];
 
@@ -115,16 +112,20 @@ export default {
       this.emitSet(this.set);
     },
 
-    customTo: function() { this.emitSet(this.set); },
-    customFrom: function() { this.emitSet(this.set); }
-  }
-}
+    customTo: function() {
+      this.emitSet(this.set);
+    },
+    customFrom: function() {
+      this.emitSet(this.set);
+    },
+  },
+};
 </script>
 <style>
 td.radio {
   width: 45px;
 }
-td label{
+td label {
   display: inline;
   font-size: 1em;
 }

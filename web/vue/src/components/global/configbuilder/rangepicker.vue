@@ -37,8 +37,8 @@ div
 
 <script>
 
-import _ from 'lodash'
-import { post } from '../../../tools/ajax'
+import _ from 'lodash';
+import { post } from '../../../tools/ajax';
 // global moment
 
 export default {
@@ -51,8 +51,8 @@ export default {
       tab: 'scan',
 
       from: '',
-      to: ''
-    }
+      to: '',
+    };
   },
   methods: {
     scan: function() {
@@ -66,41 +66,41 @@ export default {
       });
     },
     printRange: function(range) {
-      let fmt = mom => mom.format('YYYY-MM-DD HH:mm')
+      let fmt = mom => mom.format('YYYY-MM-DD HH:mm');
       let from = moment.unix(range.from);
       let to = moment.unix(range.to);
       let diff = moment.duration(to.diff(from)).humanize();
       return `${fmt(from)} to ${fmt(to)} (${diff})`;
     },
-    fmtTs: (mom) => moment.unix(mom).utc(),
-    fmt: (mom) => mom.utc().format(),
+    fmtTs: mom => moment.unix(mom).utc(),
+    fmt: mom => mom.utc().format(),
     emitRange: function(range) {
       this.$emit('range', {
         from: this.fmtTs(range.from),
-        to: this.fmtTs(range.to)
+        to: this.fmtTs(range.to),
       });
     },
     emitManualEntry: function() {
-      if(this.from.length < '4' || this.from.length < '4')
+      if (this.from.length < '4' || this.from.length < '4')
         // this cannot possibly be a valid date
-        return this.$emit('range', {})
+        return this.$emit('range', {});
 
       let from = moment.utc(this.from);
       let to = moment.utc(this.to);
 
-      if(from.isValid() && to.isValid()) {
+      if (from.isValid() && to.isValid()) {
         this.$emit('range', {
           from: this.fmt(from),
-          to: this.fmt(to)
-        })
+          to: this.fmt(to),
+        });
       } else {
         this.$emit('range', {});
       }
     },
     reset: function() {
       this.scanned = false;
-      this.$emit('range', {})
-    }
+      this.$emit('range', {});
+    },
   },
   watch: {
     from: function() {
@@ -117,15 +117,13 @@ export default {
     },
     selectedRangeIndex: function() {
       let selectedRange = this.ranges[this.selectedRangeIndex];
-      if(selectedRange)
-        this.emitRange(selectedRange);
-    }
-  }
-}
+      if (selectedRange) this.emitRange(selectedRange);
+    },
+  },
+};
 </script>
 
 <style>
-
 .scan-btn {
   margin-top: 80px;
   margin-bottom: 30px;
@@ -134,5 +132,4 @@ export default {
 .radio label {
   margin-top: 0;
 }
-
 </style>

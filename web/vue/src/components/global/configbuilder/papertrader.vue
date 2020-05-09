@@ -11,8 +11,8 @@
 
 <script>
 
-import _ from 'lodash'
-import { get } from '../../../tools/ajax'
+import _ from 'lodash';
+import { get } from '../../../tools/ajax';
 
 export default {
   created: function() {
@@ -25,18 +25,18 @@ export default {
       rawPaperTraderParams: '',
       rawPaperTraderParamsError: false,
       paperTraderParams: {},
-      toggle: 'closed'
+      toggle: 'closed',
     };
   },
   watch: {
-    rawPaperTraderParams: function() { this.emitConfig() }
+    rawPaperTraderParams: function() {
+      this.emitConfig();
+    },
   },
   methods: {
     switchToggle: function() {
-      if(this.toggle === 'open')
-        this.toggle = 'closed';
-      else
-        this.toggle = 'open';
+      if (this.toggle === 'open') this.toggle = 'closed';
+      else this.toggle = 'open';
     },
     emitConfig: function() {
       this.parseParams();
@@ -47,17 +47,17 @@ export default {
         this.paperTraderParams = toml.parse(this.rawPaperTraderParams);
         this.paperTraderParams.reportRoundtrips = true;
         this.rawPaperTraderParamsError = false;
-      } catch(e) {
+      } catch (e) {
         this.rawPaperTraderParamsError = e;
         this.paperTraderParams = {};
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style>
 .align .custom-select select {
-  padding: 0.4em 1.2em .3em .8em;
+  padding: 0.4em 1.2em 0.3em 0.8em;
 }
 
 .label-like {

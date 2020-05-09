@@ -9,10 +9,10 @@ div
 
 <script>
 
-import _ from 'lodash'
-import rangePicker from './rangepicker.vue'
-import rangeCreator from './rangecreator.vue'
-import { get } from '../../../tools/ajax'
+import _ from 'lodash';
+import rangePicker from './rangepicker.vue';
+import rangeCreator from './rangecreator.vue';
+import { get } from '../../../tools/ajax';
 
 export default {
   props: ['onlyTradable', 'onlyImportable'],
@@ -26,40 +26,40 @@ export default {
   },
   computed: {
     exchanges: function() {
-
       let exchanges = Object.assign({}, this.$store.state.exchanges);
 
-      if(_.isEmpty(exchanges))
-        return false;
+      if (_.isEmpty(exchanges)) return false;
 
-      if(this.onlyTradable) {
+      if (this.onlyTradable) {
         _.each(exchanges, (e, name) => {
-          if(!e.tradable)
-            delete exchanges[name];
+          if (!e.tradable) delete exchanges[name];
         });
       }
 
-      if(this.onlyImportable) {
+      if (this.onlyImportable) {
         _.each(exchanges, (e, name) => {
-          if(!e.importable)
-            delete exchanges[name];
+          if (!e.importable) delete exchanges[name];
         });
       }
 
       return exchanges;
-    }
+    },
   },
 
   watch: {
-    exchanges: function() { this.emitExchange() },
-    exchange: function() { this.emitExchange() }
+    exchanges: function() {
+      this.emitExchange();
+    },
+    exchange: function() {
+      this.emitExchange();
+    },
   },
 
   methods: {
     emitExchange: function() {
       this.$emit('exchange', this.exchange);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 </style>

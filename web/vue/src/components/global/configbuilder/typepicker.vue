@@ -19,30 +19,28 @@ export default {
     return {
       types: ['paper trader', 'market watcher', 'tradebot'],
       selectedTypeIndex: 0,
-    }
+    };
   },
   methods: {
     emitType: function() {
       this.$emit('type', this.type);
-    }
+    },
   },
   watch: {
     type: function() {
       this.emitType();
-    }
+    },
   },
   computed: {
     type: function() {
-      return this.types[ this.selectedTypeIndex ];
-    }
-  }
-}
+      return this.types[this.selectedTypeIndex];
+    },
+  },
+};
 </script>
 
 <style>
-
 .radio label {
   margin-top: 0;
 }
-
 </style>

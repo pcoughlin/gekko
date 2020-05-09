@@ -33,8 +33,8 @@
 
 <script>
 
-import _ from 'lodash'
-import { get } from '../../../tools/ajax'
+import _ from 'lodash';
+import { get } from '../../../tools/ajax';
 
 export default {
   data: () => {
@@ -51,43 +51,49 @@ export default {
       rawStratParamsError: false,
 
       emptyStrat: false,
-      stratParams: {}
+      stratParams: {},
     };
   },
-  created: function () {
+  created: function() {
     get('strategies', (err, data) => {
-        this.strategies = data || [];
+      this.strategies = data || [];
 
-        _.each(this.strategies, function(s) {
-          s.empty = s.params === '';
-        });
-        const strategyFiltered = _.find(this.strategies, { name: this.strategy });
-        if (strategyFiltered) {
-          this.rawStratParams = strategyFiltered.params;
-          this.emptyStrat = strategyFiltered.empty;
-        }
-        this.emitConfig();
+      _.each(this.strategies, function(s) {
+        s.empty = s.params === '';
+      });
+      const strategyFiltered = _.find(this.strategies, { name: this.strategy });
+      if (strategyFiltered) {
+        this.rawStratParams = strategyFiltered.params;
+        this.emptyStrat = strategyFiltered.empty;
+      }
+      this.emitConfig();
     });
   },
   watch: {
     strategy: function(strat) {
       const strategyWithName = _.find(this.strategies, { name: strat });
-      this.rawStratParams = strategyWithName ? strategyWithName.params: undefined;
+      this.rawStratParams = strategyWithName
+        ? strategyWithName.params
+        : undefined;
       this.emptyStrat = strat.empty;
 
       this.emitConfig();
     },
-    candleSize: function() { this.emitConfig() },
-    historySize: function() { this.emitConfig() },
-    rawStratParams: function() { this.emitConfig() }
+    candleSize: function() {
+      this.emitConfig();
+    },
+    historySize: function() {
+      this.emitConfig();
+    },
+    rawStratParams: function() {
+      this.emitConfig();
+    },
   },
   computed: {
     candleSize: function() {
-       if(this.candleSizeUnit === 'minutes')
-        return this.rawCandleSize;
-      else if(this.candleSizeUnit === 'hours')
-        return this.rawCandleSize * 60;
-      else if(this.candleSizeUnit === 'days')
+      if (this.candleSizeUnit === 'minutes') return this.rawCandleSize;
+      else if (this.candleSizeUnit === 'hours') return this.rawCandleSize * 60;
+      else if (this.candleSizeUnit === 'days')
         return this.rawCandleSize * 60 * 24;
     },
     singularCandleSizeUnit: function() {
@@ -100,20 +106,18 @@ export default {
           enabled: true,
           method: this.strategy,
           candleSize: +this.candleSize,
-          historySize: +this.historySize
-        }
-      }
+          historySize: +this.historySize,
+        },
+      };
 
-      if(this.emptyStrat)
-        config[this.strategy] = {__empty: true}
-      else
-        config[this.strategy] = this.stratParams;
+      if (this.emptyStrat) config[this.strategy] = { __empty: true };
+      else config[this.strategy] = this.stratParams;
 
       return config;
-    }
+    },
   },
   methods: {
-    humanizeDuration: (n) => window.humanizeDuration(n),
+    humanizeDuration: n => window.humanizeDuration(n),
     emitConfig: function() {
       this.parseParams();
       this.$emit('stratConfig', this.config);
@@ -122,17 +126,17 @@ export default {
       try {
         this.stratParams = toml.parse(this.rawStratParams);
         this.rawStratParamsError = false;
-      } catch(e) {
+      } catch (e) {
         this.rawStratParamsError = e;
         this.stratParams = {};
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style>
 .align .custom-select select {
-  padding: 0.4em 1.2em .3em .8em;
+  padding: 0.4em 1.2em 0.3em 0.8em;
 }
 
 .label-like {
