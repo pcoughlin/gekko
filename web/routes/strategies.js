@@ -1,18 +1,24 @@
 const _ = require('lodash');
 const fs = require('co-fs');
+const path = require('path');
 
-const gekkoRoot = __dirname + '/../../';
+const gekkoRoot = path.resolve(__dirname, '..', '..');
 
 module.exports = function* () {
-  const strategyDir = yield fs.readdir(gekkoRoot + 'strategies');
+
+  const strategyDir = yield fs.readdir(path.join(gekkoRoot, 'strategies'));
+  console.log("******************", strategyDir);
+
   const strats = strategyDir
-    .filter(f => _.last(f, 3).length > 0 && [_.last(f, 3)].join('') === '.js')
-    .map(f => {
-      return { name: f.slice(0, -3) }
-    });
+    .map((f) => { return { name: f.slice(0, -3) } });
+
+  // .filter(f => _.last(f, 3).length > 0 && [_.last(f, 3)].join('') === '.js')
+  // .map(f => {
+  //   return { name: f.slice(0, -3) }
+  // });
 
   // for every strat, check if there is a config file and add it
-  const stratConfigPath = gekkoRoot + 'config/strategies';
+  const stratConfigPath = path.join(gekkoRoot, 'config/strategies');
   const strategyParamsDir = yield fs.readdir(stratConfigPath);
 
   for (let i = 0; i < strats.length; i++) {
