@@ -56,21 +56,23 @@ export default {
   },
   created: function () {
     get('strategies', (err, data) => {
-        this.strategies = data;
+        this.strategies = data || [];
 
         _.each(this.strategies, function(s) {
           s.empty = s.params === '';
         });
-
-        this.rawStratParams = _.find(this.strategies, { name: this.strategy }).params;
-        this.emptyStrat = _.find(this.strategies, { name: this.strategy }).empty;
+        const strategyFiltered = _.find(this.strategies, { name: this.strategy });
+        if (strategyFiltered) {
+          this.rawStratParams = strategyFiltered.params;
+          this.emptyStrat = strategyFiltered.empty;
+        }
         this.emitConfig();
     });
   },
   watch: {
     strategy: function(strat) {
-      strat = _.find(this.strategies, { name: strat });
-      this.rawStratParams = strat.params;
+      const strategyWithName = _.find(this.strategies, { name: strat });
+      this.rawStratParams = strategyWithName ? strategyWithName.params: undefined;
       this.emptyStrat = strat.empty;
 
       this.emitConfig();
