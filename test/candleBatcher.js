@@ -74,9 +74,10 @@ describe('core/candleBatcher', function() {
 
   it('should correctly add two candles together', function() {
     cb = new CandleBatcher(2);
-    var _candles = _.first(candles, 2);
-    var first = _.first(_candles);
-    var second = _.last(_candles);
+
+    var _candles = [candles[0], candles[1]];
+    var first = _.head(_candles);
+    var second = _.tail(_candles);
 
     var result = {
       start: first.start,
@@ -96,7 +97,9 @@ describe('core/candleBatcher', function() {
     cb.write( _candles );
     cb.flush();
 
-    var cbResult = _.first(_.first(spy.args));
+    var cbResult = _.head(spy.args)[0];
+    console.log(cbResult, "\n", result);
+    
     expect(cbResult).to.deep.equal(result);
     expect(cbResult.id).to.equal(undefined);
   });
