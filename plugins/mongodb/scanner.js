@@ -23,7 +23,7 @@ module.exports = done => {
                             pair = pair.split('_');
                             markets.push({
                                 exchange: exchange,
-                                currency: _.first(pair),
+                                currency: _.head(pair),
                                 asset: _.last(pair)
                             });
                         });

@@ -101,7 +101,7 @@ var pipeline = (settings) => {
           error += 'This is unsupported.'
           util.die(error);
         } else {
-          subscription.emitter = _.first(singleEventEmitters);
+          subscription.emitter = _.head(singleEventEmitters);
         }
       }
     );

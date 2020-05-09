@@ -182,7 +182,7 @@ Actor.prototype.emitRealAdvice = function(receiver) {
     'When I get a hold of the son of a bitch who leaked this, I\'m gonna tear his eyeballs out and I\'m gonna suck his fucking skull.'
   ];
 
-  this.sendMessageTo(receiver, _.first(_.shuffle(realAdvice)));
+  this.sendMessageTo(receiver, _.head(_.shuffle(realAdvice)));
 }
 
 Actor.prototype.logError = function(message) {

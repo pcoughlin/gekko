@@ -283,7 +283,7 @@ Trader.prototype.getTrades = function(since, callback, descending) {
 
     if (this.scanback) {
       var last = _.last(data);
-      var first = _.first(data);
+      var first = _.head(data);
 
       // Try to find trade id matching the since date
       if (!this.scanbackTid) {

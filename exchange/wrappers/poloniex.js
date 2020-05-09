@@ -425,13 +425,13 @@ Trader.prototype.getOrder = function(order, callback) {
     });
 
     const fees = {};
-    const feePercent = _.first(result).fee * 100;
+    const feePercent = _.head(result).fee * 100;
 
-    if(_.first(result).type === 'sell') {
-      const fee = price * amount * _.first(result).fee;
+    if(_.head(result).type === 'sell') {
+      const fee = price * amount * _.head(result).fee;
       fees[this.currency] = fee;
     } else {
-      const fee = amount * _.first(result).fee;
+      const fee = amount * _.head(result).fee;
       fees[this.asset] = fee;
     }
 

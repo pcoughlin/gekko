@@ -40,7 +40,7 @@ Reader.prototype.mostRecentWindow = function mostRecentWindow (from, to, next) {
     }
 
     // we have at least one gap, figure out where
-    var mostRecent = _.first(docs).start;
+    var mostRecent = _.head(docs).start;
 
     var gapIndex = _.findIndex(docs, (r, i) => r.start !== mostRecent - i * 60);
 
@@ -96,13 +96,13 @@ Reader.prototype.getBoundry = function getBoundry (next) {
     if (err) {
       return util.die('DB error at `getBoundry`');
     }
-    var start = _.first(docs).start;
+    var start = _.head(docs).start;
 
     this.collection.find({ pair: this.pair }, { start: 1 }).sort({ start: -1 }).limit(1, (err2, docs2) => {
       if (err2) {
         return util.die('DB error at `getBoundry`');
       }
-      var end = _.first(docs2).start;
+      var end = _.head(docs2).start;
       return next(null, { first: start, last: end });
     });
     return null;

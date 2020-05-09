@@ -102,9 +102,9 @@ var handleFetch = (err, trades) => {
   if (trades.length) {
     stride = ITERATING_STRIDE;
     batch = trades.concat(batch);
-    var last = moment.unix(_.first(trades).date);
+    var last = moment.unix(_.head(trades).date);
     lastTimestamp = last.valueOf();
-    lastId = _.first(trades).tid;
+    lastId = _.head(trades).tid;
   } else {
     stride = SCANNING_STRIDE;
     lastTimestamp = moment(lastTimestamp)

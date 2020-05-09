@@ -209,7 +209,7 @@ Stitcher.prototype.checkExchangeTrades = function(since, next) {
       );
 
     next(e, {
-      from: _.first(d).date,
+      from: _.head(d).date,
       to: _.last(d).date
     })
   });

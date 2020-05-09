@@ -138,7 +138,7 @@ Trader.prototype.cancelOrder = function(order_id, callback) {
 Trader.prototype.getOrder = function(order_id, callback) {
 
   var handle = (err, resp) => {
-    var order = _.first(resp.orders);
+    var order = _.head(resp.orders);
 
     var amount = order.deal_amount;
     var price = order.price;

@@ -44,7 +44,7 @@ describe('budfox/tradeBatcher', function() {
   });
 
   it('should throw when not fed an array', function() {
-    var trade = _.first(trades_tid_1);
+    var trade = _.head(trades_tid_1);
     expect(
       tb.write.bind(tb, trade)
     ).to.throw('batch is not an array');
@@ -85,13 +85,13 @@ describe('budfox/tradeBatcher', function() {
     var result = {
       data: transformedTrades,
       amount: _.size(transformedTrades),
-      start: _.first(transformedTrades).date,
+      start: _.head(transformedTrades).date,
       end: _.last(transformedTrades).date,
-      first: _.first(transformedTrades),
+      first: _.head(transformedTrades),
       last: _.last(transformedTrades)
     }
 
-    var tbResult = _.first(_.first(spy.args));
+    var tbResult = _.head(_.head(spy.args));
     expect(tbResult.amount).to.equal(result.amount);
     expect(tbResult.start.unix()).to.equal(result.start.unix());
     expect(tbResult.end.unix()).to.equal(result.end.unix());
@@ -115,7 +115,7 @@ describe('budfox/tradeBatcher', function() {
 
     expect(spy.callCount).to.equal(2);
 
-    var tbResult = _.first(_.last(spy.args));
+    var tbResult = _.head(_.last(spy.args));
 
     expect(tbResult.amount).to.equal(2);
     expect(tbResult.start.unix()).to.equal(1466115796);

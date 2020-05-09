@@ -16,7 +16,7 @@ module.exports = function() {
 
   let _config = getTOML(configDir + 'general.toml');
   fs.readdirSync(configDir + 'plugins').forEach(function(pluginFile) {
-    let pluginName = _.first(pluginFile.split('.'))
+    let pluginName = _.head(pluginFile.split('.'))
     _config[pluginName] = getTOML(configDir + 'plugins/' + pluginFile);
   });
 

@@ -69,7 +69,7 @@ module.exports = done => {
               if(first === 'candles')
                 markets.push({
                   exchange: exchangeName,
-                  currency: _.first(parts),
+                  currency: _.head(parts),
                   asset: _.last(parts)
                 });
             });

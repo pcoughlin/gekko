@@ -97,7 +97,7 @@ describe('exchanges/bitstamp', function() {
 
       expect(trades.length).to.equal(TRADES.length);
 
-      var oldest = _.first(trades);
+      var oldest = _.head(trades);
       var OLDEST = _.last(TRADES);
 
       expect(oldest.tid).to.equal(+OLDEST.tid);

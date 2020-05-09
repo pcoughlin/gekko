@@ -706,7 +706,7 @@ class StickyOrder extends BaseOrder {
         orders: trades.length
       }
 
-      const first = _.first(trades);
+      const first = _.head(trades);
 
       if(first && first.fees) {
         summary.fees = {};

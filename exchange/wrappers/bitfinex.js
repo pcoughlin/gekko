@@ -241,7 +241,7 @@ Trader.prototype.getOrder = function(order_id, callback) {
       if (err) return callback(err);
 
       console.log('processPastTrade', data);
-      const trade = _.first(data);
+      const trade = _.head(data);
 
       const fees = {
         [trade.fee_currency]: trade.fee_amount

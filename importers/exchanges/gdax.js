@@ -46,15 +46,15 @@ Fetcher.prototype.findFirstTrade = function(sinceTs, callback) {
   const handle = (err, data) => {
     if (err) return callback(err);
 
-    let m = moment.utc(_.first(data).time);
+    let m = moment.utc(_.head(data).time);
     let ts = m.valueOf();
     if (ts < sinceTs) {
       log.info(`First trade ID for batching found ${currentId - SCAN_ITER_SIZE}`);
       return callback(undefined, currentId - SCAN_ITER_SIZE);
     }
 
-    currentId = _.first(data).trade_id;
-    log.debug(`Have trade id ${currentId} for date ${_.first(data).time} ${sinceM.from(m, true)} to scan`);
+    currentId = _.head(data).trade_id;
+    log.debug(`Have trade id ${currentId} for date ${_.head(data).time} ${sinceM.from(m, true)} to scan`);
 
     let nextScanId = currentId - SCAN_ITER_SIZE;
     if (nextScanId <= SCAN_ITER_SIZE) {
@@ -127,8 +127,8 @@ let handleFetch = (err, trades) => {
   if (trades.length) {
     batch = trades.concat(batch);
 
-    let last = moment.unix(_.first(trades).date).utc();
-    lastId = _.first(trades).tid
+    let last = moment.unix(_.head(trades).date).utc();
+    lastId = _.head(trades).tid
 
     let latestTrade = _.last(trades);
     if (!latestId || latestTrade.tid > latestId) {

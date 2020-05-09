@@ -143,7 +143,7 @@ Actor.prototype.emitRealAdvice = function() {
     'When I get a hold of the son of a bitch who leaked this, I\'m gonna tear his eyeballs out and I\'m gonna suck his fucking skull.'
   ];
 
-  this.bot.say(ircbot.channel, _.first(_.shuffle(realAdvice)));
+  this.bot.say(ircbot.channel, _.head(_.shuffle(realAdvice)));
 }
 
 Actor.prototype.logError = function(message) {

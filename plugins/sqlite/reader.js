@@ -18,7 +18,7 @@ Reader.prototype.mostRecentWindow = function (from, to, next) {
   if (!this.db) {
     this.db = sqlite.initDB(true);
   }
-  
+
   to = to.unix();
   from = from.unix();
 
@@ -55,7 +55,7 @@ Reader.prototype.mostRecentWindow = function (from, to, next) {
     }
 
     // we have at least one gap, figure out where
-    var mostRecent = _.first(rows).start;
+    var mostRecent = _.head(rows).start;
 
     var gapIndex = _.findIndex(rows, function (r, i) {
       return r.start !== mostRecent - i * 60;
@@ -133,7 +133,7 @@ Reader.prototype.count = function (from, to, next) {
       return util.die('DB error at `get`');
     }
 
-    next(null, _.first(res).count);
+    next(null, _.head(res).count);
   });
 }
 
@@ -149,7 +149,7 @@ Reader.prototype.countTotal = function (next) {
       return util.die('DB error at `get`');
     }
 
-    next(null, _.first(res).count);
+    next(null, _.head(res).count);
   });
 }
 
@@ -176,7 +176,7 @@ Reader.prototype.getBoundry = function (next) {
       return util.die('DB error at `get`');
     }
 
-    next(null, _.first(rows));
+    next(null, _.head(rows));
   });
 }
 

@@ -127,7 +127,7 @@ CandleCreator.prototype.calculateCandles = function() {
 }
 
 CandleCreator.prototype.calculateCandle = function(trades) {
-  var first = _.first(trades);
+  var first = _.head(trades);
 
   var f = parseFloat;
 
@@ -165,7 +165,7 @@ CandleCreator.prototype.addEmptyCandles = function(candles) {
     return candles;
 
   // iterator
-  var start = _.first(candles).start.clone();
+  var start = _.head(candles).start.clone();
   var end = _.last(candles).start;
   var i, j = -1;
 

@@ -51,7 +51,7 @@ class Broker {
     this.capabilities = API.getCapabilities();
 
     this.marketConfig = _.find(this.capabilities.markets, (p) => {
-      return _.first(p.pair) === config.currency.toUpperCase() &&
+      return _.head(p.pair) === config.currency.toUpperCase() &&
         _.last(p.pair) === config.asset.toUpperCase();
     });
 

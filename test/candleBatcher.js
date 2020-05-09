@@ -38,14 +38,14 @@ describe('core/candleBatcher', function() {
   });
 
   it('should throw when fed a candle', function() {
-    var candle = _.first(candles);
+    var candle = _.head(candles);
     expect(
       cb.write.bind(cb, candle)
     ).to.throw('candles is not an array');
   });
 
   it('should not emit an event when fed not enough candles', function() {
-    var candle = _.first(candles);
+    var candle = _.head(candles);
 
     var spy = sinon.spy();
     cb.on('candle', spy);

@@ -27,7 +27,7 @@ module.exports = function(done) {
       util.die('No history found for this market', true);
 
     if(_.size(ranges) === 1) {
-      var r = _.first(ranges);
+      var r = _.head(ranges);
       log.info('Gekko was able to find a single daterange in the locally stored history:');
       log.info('\t', 'from:', moment.unix(r.from).utc().format('YYYY-MM-DD HH:mm:ss'));
       log.info('\t', 'to:', moment.unix(r.to).utc().format('YYYY-MM-DD HH:mm:ss'));

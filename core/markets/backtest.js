@@ -84,7 +84,7 @@ Market.prototype.processCandles = function(err, candles) {
     var d = function(ts) {
       return moment.unix(ts).utc().format('YYYY-MM-DD HH:mm:ss');
     }
-    var from = d(_.first(candles).start);
+    var from = d(_.head(candles).start);
     var to = d(_.last(candles).start);
     log.warn(`Simulation based on incomplete market data (${this.batchSize - amount} missing between ${from} and ${to}).`);
   }
