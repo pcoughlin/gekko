@@ -1,7 +1,8 @@
 const _ = require('lodash');
 const fs = require('co-fs');
+const path = require('path');
 
-const gekkoRoot = __dirname + '/../../';
+const gekkoRoot = path.resolve(__dirname, '..', '..');
 var util = require(__dirname + '/../../core/util');
 
 var config = {};
@@ -12,9 +13,9 @@ config.silent = false;
 util.setConfig(config);
 
 module.exports = function* () {
-  const exchangesDir = yield fs.readdir(gekkoRoot + 'exchange/wrappers/');
+  
+  const exchangesDir = yield fs.readdir(path.join(gekkoRoot, 'exchange/wrappers/'));
   const exchanges = exchangesDir
-    .filter(f => _.last(f, 3).length > 0 && [_.last(f, 3)].join('') === '.js')
     .map(f => f.slice(0, -3));
 
   let allCapabilities = [];
@@ -23,7 +24,7 @@ module.exports = function* () {
     let Trader = null;
 
     try {
-      Trader = require(gekkoRoot + 'exchange/wrappers/' + exchange);
+      Trader = require(path.join(gekkoRoot, 'exchange/wrappers/', exchange));
     } catch (e) {
       return;
     }
