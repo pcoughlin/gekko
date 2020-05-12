@@ -10,7 +10,7 @@ const base = require('./baseConfig');
 
 // starts an import
 // requires a post body with a config object
-module.exports = function *() {
+module.exports = function* () {
   let mode = 'importer';
 
   let config = {}
@@ -24,10 +24,8 @@ module.exports = function *() {
   console.log('Import', importId, 'started');
 
   pipelineRunner(mode, config, (err, event) => {
-    if(errored)
-      return;
 
-    if(err) {
+    if (err) {
       errored = true;
       console.error('RECEIVED ERROR IN IMPORT', importId);
       console.error(err);
@@ -39,9 +37,13 @@ module.exports = function *() {
       });
     }
 
-    if(!event)
+    if (!event) {
+      console.error('No events found');      
       return;
+    }
 
+    console.log('Updating local cache', importId);
+    
     // update local cache
     importManager.update(importId, {
       latest: event.latest,
@@ -57,6 +59,7 @@ module.exports = function *() {
         done: event.done
       }
     }
+    console.log('Broadcasting web socket event', )
     broadcast(wsEvent);
   });
 

@@ -63,14 +63,16 @@ var pluginHelper = {
   // @param Function next
   //    callback
   load: function (plugin, next) {
+    console.log("Loading plugin", plugin);
 
     plugin.config = config[plugin.slug];
+    console.log("Plugin config", plugin.config);
 
     if (!plugin.config || !plugin.config.enabled)
       return next();
 
     if (!_.includes(plugin.modes, gekkoMode)) {
-      log.warn(
+      console.log(
         'The plugin',
         plugin.name,
         'does not support the mode',
@@ -80,24 +82,29 @@ var pluginHelper = {
       return next();
     }
 
-    log.info('Setting up:');
-    log.info('\t', plugin.name);
-    log.info('\t', plugin.description);
+    console.log('Setting up:');
+    console.log('\t', plugin.name);
+    console.log('\t', plugin.description);
 
     var cannotLoad = pluginHelper.cannotLoad(plugin);
-    if (cannotLoad)
+    if (cannotLoad) {
+      console.log("Cannot load plugin");
       return next(cannotLoad);
-
+    }
+    var Constructor
     if (plugin.path)
-      var Constructor = require(pluginDir + plugin.path(config));
+      Constructor = require(pluginDir + plugin.path(config));
     else
-      var Constructor = require(pluginDir + plugin.slug);
-
+      Constructor = require(pluginDir + plugin.slug);
+  
+    console.log("Constructor loaded");
+    
     if (plugin.async) {
       inherits(Constructor, Emitter);
       var instance = new Constructor(util.defer(function (err) {
         next(err, instance);
       }), plugin);
+      console.log("Constructor initialized");
       Emitter.call(instance);
 
       instance.meta = plugin;
@@ -105,6 +112,7 @@ var pluginHelper = {
       inherits(Constructor, Emitter);
       var instance = new Constructor(plugin);
       Emitter.call(instance);
+      console.log("Constructor initialized");
 
       instance.meta = plugin;
       _.defer(function () {

@@ -11,7 +11,7 @@ var redis = require("redis");
 
 var Actor = function(done) {
   _.bindAll(this);
-
+  
   this.market = [
     watch.exchange,
     watch.currency,

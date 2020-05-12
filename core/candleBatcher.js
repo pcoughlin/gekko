@@ -103,8 +103,7 @@ class CandleBatcher {
   // calculatedCandles = [];
 
   constructor(candleSizeInput) {
-    console.log("*************************************", candleSizeInput);
-    
+
     if (!_.isNumber(candleSizeInput))
       throw new Error('candleSize is not a number');
 
@@ -113,6 +112,7 @@ class CandleBatcher {
     this.calculatedCandles = [];
     _.bindAll(this);
     util.makeEventEmitter(CandleBatcher);
+
   }
 
 

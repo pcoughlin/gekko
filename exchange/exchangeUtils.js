@@ -20,7 +20,7 @@ const retryInstance = (options, checkFn, callback, e) => {
   operation.attempt(function(currentAttempt) {
     checkFn((err, result) => {
 
-      if(!err) {
+      if (!err) {        
         return callback(undefined, result);
       }
 

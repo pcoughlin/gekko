@@ -48,14 +48,14 @@ Store.prototype.upsertTables = function () {
   //   this.db.run(q, next);
   // }, this);
 
-
-  this.db = sqlite.initDB(false);
+  if (!this.db) {
+    this.db = sqlite.initDB(false);
+  }
   for (let q of createQueries) {
-    console.log(q);
 
     this.db.run(q, (res, err) => {
       if (err) {
-        // console.log(err);
+        console.error("Error in executing query ", q, err);
         process.kill(0)
       }
       // console.log(res);
@@ -66,7 +66,9 @@ Store.prototype.upsertTables = function () {
 Store.prototype.writeCandles = function () {
   if (_.isEmpty(this.cache))
     return;
-
+  if (!this.db) {
+    this.db = sqlite.initDB(false);
+  }
   const transaction = () => {
     this.db.run("BEGIN TRANSACTION");
 

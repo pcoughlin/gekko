@@ -43,7 +43,7 @@ if(util.launchUI()) {
   return require(util.dirs().web + 'server');
 }
 
-const pipeline = require(dirs.core + 'pipeline');
+const pipeline = require('./core/pipeline');
 const config = util.getConfig();
 const mode = util.gekkoMode();
 
@@ -56,6 +56,7 @@ if(
 
 // > Ever wonder why fund managers can't beat the S&P 500?
 // > 'Cause they're sheep, and sheep get slaughtered.
+console.log("Calling pipeline");
 pipeline({
   config: config,
   mode: mode

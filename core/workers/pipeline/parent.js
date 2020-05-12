@@ -19,6 +19,7 @@ module.exports = (mode, config, callback) => {
   };
 
   child.on('message', function(m) {
+    
     if(m === 'ready')
       return child.send(message);
 
@@ -28,6 +29,7 @@ module.exports = (mode, config, callback) => {
     handle.message(m);
   });
 
+  child.on('error', handle.exit);
   child.on('exit', handle.exit);
 
   return child;

@@ -32,24 +32,26 @@ var start = (mode, config) => {
   util.setGekkoMode(mode);
   util.setConfig(config);
 
-  var pipeline = require(dirs.core + 'pipeline');
+  var pipeline = require('../../pipeline');
+
   pipeline({
     config: config,
     mode: mode
   });
 }
 
+console.log(`Attempting to send ready event`);
 process.send('ready');
 
-process.on('message', function(m) {
-  if(m.what === 'start')
+process.on('message', function (m) {
+  if (m.what === 'start')
     start(m.mode, m.config);
 
-  if(m.what === 'exit')
+  if (m.what === 'exit') 
     process.exit(0);
 });
 
-process.on('disconnect', function() {
+process.on('disconnect', function () {
   console.log('disconnect');
   process.exit(-1);
 })
@@ -57,10 +59,10 @@ process.on('disconnect', function() {
 process
   .on('unhandledRejection', (message, p) => {
     console.error('unhandledRejection', message);
-    process.send({type: 'error', message: message});
+    process.send({ type: 'error', message: message });
   })
   .on('uncaughtException', err => {
     console.error('uncaughtException', err);
-    process.send({type: 'error', error: err});
+    process.send({ type: 'error', error: err });
     process.exit(1);
   });

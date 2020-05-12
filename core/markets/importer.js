@@ -41,37 +41,37 @@ var fetcher = require(dirs.importers + config.watch.exchange);
 if(to <= from)
   util.die('This daterange does not make sense.')
 
+var tradeBatcher, candleManager, exchangeSettings, fetcher
 var Market = function() {
   _.bindAll(this);
-  this.exchangeSettings = exchangeChecker.settings(config.watch);
-
-  this.tradeBatcher = new TradeBatcher(this.exchangeSettings.tid);
-  this.candleManager = new CandleManager;
-  this.fetcher = fetcher({
+  exchangeSettings = exchangeChecker.settings(config.watch);
+  tradeBatcher = new TradeBatcher(exchangeSettings.tid);
+  candleManager = new CandleManager;
+  fetcher = fetcher({
     to: to,
     from: from
   });
 
   this.done = false;
 
-  this.fetcher.bus.on(
+  fetcher.bus.on(
     'trades',
     this.processTrades
   );
 
-  this.fetcher.bus.on(
+  fetcher.bus.on(
     'done',
     function() {
       this.done = true;
     }.bind(this)
   )
 
-  this.tradeBatcher.on(
+  tradeBatcher.on(
     'new batch',
-    this.candleManager.processTrades
+    candleManager.processTrades
   );
 
-  this.candleManager.on(
+  candleManager.on(
     'candles',
     this.pushCandles
   );
@@ -93,11 +93,12 @@ Market.prototype.pushCandles = function(candles) {
 }
 
 Market.prototype.get = function() {
-  this.fetcher.fetch();
+  fetcher.fetch();
 }
 
 Market.prototype.processTrades = function(trades) {
-  this.tradeBatcher.write(trades);
+  console.log("Trade values received: ",trades);
+  tradeBatcher.write(trades);
 
   if(this.done) {
     log.info('Done importing!');
@@ -108,6 +109,7 @@ Market.prototype.processTrades = function(trades) {
   if(_.size(trades) && gekkoEnv === 'child-process') {
     let lastAtTS = _.last(trades).date;
     let lastAt = moment.unix(lastAtTS).utc().format();
+    log.info('Process market update event');
     process.send({event: 'marketUpdate', payload: lastAt});
   }
 
