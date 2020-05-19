@@ -82,7 +82,7 @@ Trader.prototype.processResponse = function(next, fn, payload) {
   // TODO: in very rare cases the callback is
   // called twice (first on ETIMEDOUT later
   // without error). Temp workaround.
-  next = _.once(next);
+  // next = _.once(next);
 
   return (err, data) => {
     let error;
@@ -109,7 +109,7 @@ Trader.prototype.processResponse = function(next, fn, payload) {
       error.notFatal = true;
       data = undefined;
     } else if(includes(data, ['<!DOCTYPE html>'])) {
-      error = new Error(data);
+      error = new Error(data); 
       data = undefined;
     }
 

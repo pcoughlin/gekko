@@ -4,6 +4,7 @@ var config = util.getConfig();
 var dirs = util.dirs();
 var log = require(dirs.core + 'log');
 var moment = require('moment');
+var Readable = require('stream').Readable;
 var gekkoEnv = util.gekkoEnv();
 
 var adapter = config[config.adapter];
@@ -78,10 +79,10 @@ var Market = function() {
 
   Readable.call(this, {objectMode: true});
 
-  this.get();
+  get();
 }
 
-var Readable = require('stream').Readable;
+
 Market.prototype = Object.create(Readable.prototype, {
   constructor: { value: Market }
 });
@@ -92,7 +93,7 @@ Market.prototype.pushCandles = function(candles) {
   _.each(candles, this.push);
 }
 
-Market.prototype.get = function() {
+function get() {
   fetcher.fetch();
 }
 
@@ -111,9 +112,16 @@ Market.prototype.processTrades = function(trades) {
     let lastAt = moment.unix(lastAtTS).utc().format();
     log.info('Process market update event');
     process.send({event: 'marketUpdate', payload: lastAt});
+  } else {
+    this.done = true;
+    log.info('Done importing!');
+    console.log("what is emit here",this.emit);
+    
+    this.emit('end');
+    return;    
   }
 
-  setTimeout(this.get, 1000);
+  setTimeout(get, 1000);
 }
 
 module.exports = Market;

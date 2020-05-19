@@ -66,7 +66,6 @@ var pluginHelper = {
     console.log("Loading plugin", plugin);
 
     plugin.config = config[plugin.slug];
-    console.log("Plugin config", plugin.config);
 
     if (!plugin.config || !plugin.config.enabled)
       return next();
