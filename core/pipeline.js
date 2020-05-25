@@ -79,20 +79,20 @@ var pipeline = (settings) => {
   // Some plugins emit their own events, store
   // a reference to those plugins.
   function referenceEmitters(next) {
-console.log("at 2nd function==========================");
+    console.log("at 2nd function==========================");
 
     _.each(plugins, function (plugin) {
       if (plugin.meta.emits)
         emitters[plugin.meta.slug] = plugin;
     });
-next();
+    next();
 
   }
 
   // Subscribe all plugins to other emitting plugins
   function subscribePlugins(next) {
     console.log("at subscribePlugins ======================3rd");
-    
+
     // events broadcasted by plugins
     var pluginSubscriptions = _.filter(
       subscriptions,
@@ -190,7 +190,7 @@ next();
 
   function prepareMarket(next) {
     console.log("at prepareMarket =========================4th");
-    
+
     if (mode === 'backtest' && config.backtest.daterange === 'scan')
       require(dirs.core + 'prepareDateRange')(next);
     else
@@ -199,7 +199,7 @@ next();
 
   function setupMarket(next) {
     console.log("at setupMarket =======================5th");
-    
+
     // load a market based on the config (or fallback to mode)
     let marketType;
     if (config.market)
@@ -215,7 +215,7 @@ next();
   }
 
   function subscribePluginsToMarket(next) {
-console.log("at subscribePluginsToMarket =========================6th");
+    console.log("at subscribePluginsToMarket =========================6th");
 
     // events broadcasted by the market
     var marketSubscriptions = _.filter(
@@ -252,7 +252,7 @@ console.log("at subscribePluginsToMarket =========================6th");
       subscribePluginsToMarket
     ],
     function () {
-console.log("at setup done ====================== final");
+      console.log("at setup done ====================== final");
 
       var gekkoStream = new GekkoStream(plugins);
 

@@ -64,11 +64,13 @@ var pluginHelper = {
   //    callback
   load: function (plugin, next) {
     console.log("Loading plugin", plugin);
-
+  
     plugin.config = config[plugin.slug];
 
-    if (!plugin.config || !plugin.config.enabled)
+    if (!plugin.config || !plugin.config.enabled) {
+      console.log(`Configuration not found for: ${plugin.name}`);
       return next();
+    }
 
     if (!_.includes(plugin.modes, gekkoMode)) {
       console.log(

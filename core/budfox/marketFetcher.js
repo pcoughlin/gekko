@@ -17,7 +17,7 @@ const log = require(dirs.core + 'log');
 const exchangeChecker = require(dirs.gekko + 'exchange/exchangeChecker');
 
 const TradeBatcher = require(util.dirs().budfox + 'tradeBatcher');
-
+let batcher;
 const Fetcher = function(config) {
   if(!_.isObject(config))
     throw new Error('TradeFetcher expects a config');
@@ -44,7 +44,7 @@ const Fetcher = function(config) {
     }
   }
 
-  this.batcher = new TradeBatcher(this.exchange.tid);
+  batcher = new TradeBatcher(this.exchange.tid);
 
   this.pair = [
     config.watch.asset,
@@ -64,7 +64,7 @@ const Fetcher = function(config) {
 
   this.firstFetch = true;
 
-  this.batcher.on('new batch', this.relayTrades);
+  batcher.on('new batch', this.relayTrades);
 }
 
 util.makeEventEmitter(Fetcher);
@@ -99,7 +99,7 @@ Fetcher.prototype.processTrades = function(err, trades) {
     setTimeout(this._fetch, +moment.duration('s', 1));
     return;
   }
-  this.batcher.write(trades);
+  batcher.write(trades);
 }
 
 Fetcher.prototype.relayTrades = function(batch) {
